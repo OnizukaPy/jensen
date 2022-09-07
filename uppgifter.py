@@ -14,3 +14,5 @@ while True:
     if svar != "s":
         print("Hejdå")
         break
+        
+print("Fine")
