@@ -1,11 +1,11 @@
-högt = int(input("Skriv högtet: "))
+höjd = int(input("Skriv höjden: "))
 i = 0
 
-while högt > 0.01:
-    print(f"{i} gång. Högt är {högt:.2f}. ", end=" ")
-    högt *= 0.7
+while höjd > 0.01:
+    print(f"{i} gång. Höjden är {höjd:.2f}. ", end=" ")
+    höjd *= 0.7
     i += 1
-    print(f"Nu är det {högt:.2f} meter", end="\n")
+    print(f"Nu är det {höjd:.2f} meter", end="\n")
 else:
     print(f"Ballen är stilla på golvet efter {i} gånger")
     
