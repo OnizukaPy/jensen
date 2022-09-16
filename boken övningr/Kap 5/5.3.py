@@ -23,19 +23,33 @@ while True:
 # check av personnummer är rätt för skatteverket
 # https://sv.wikipedia.org/wiki/Personnummer_i_Sverige
 
-personnummer_list = []
-for i in text:
-    personnummer_list.append(int(i))
+udda = ""
+jämn = ""
+for i in range(0, len(temp)-1, 2):
+    jämn += str(int(temp[i])*2)
+    #print(jämn)
+for i in range(1, len(temp)-2, 2):
+    udda += str(int(temp[i]))
+    #print(udda)
 
-summa = (sum(personnummer_list[0:len(personnummer_list)-1:2])*2 + sum(personnummer_list[1:len(personnummer_list):2]))
+temp2 = jämn + udda
+#print(temp2)
+summa = 0
+for i in temp2:
+    summa += int(i)
+
 check_sum = (10 - (summa%10)) % 10
-if check_sum == list[-1]:
+#print(check_sum)
+
+if check_sum == int(temp[-1]):
     print("Personnummer är rätt för skatteverket\n")
+else:
+    print("Personnummer är inte rätt för skatteverket\n")
 
 # check för kön
 # https://www.personnummer.nu/mer-information/
 
-if personnummer_list[-2] % 2 == 0:
+if int(temp[-2]) % 2 == 0:
     print("Du är en kvinna!\nHejdå!\n")
 else:
     print("Du är en man!\nHejdå!\n")
