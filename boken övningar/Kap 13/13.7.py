@@ -11,11 +11,13 @@ class Figure:
 
     def __init__(self, namn):
         self.namn = namn
+        
     
 class Cyrkel(Figure):
 
-    def __init__(self, namn, r):
+    def __init__(self, namn, startpunkt, r):
         super().__init__(namn)
+        self.center = startpunkt
         self.radie = r
     
     def area(self):
@@ -56,9 +58,11 @@ startpunkt = Punkt("A", 1,1)
 p2 = Punkt("D", 2,2)
 p3 = Punkt("B", 1,2)
 
+cir = Cyrkel("Ar", startpunkt, 1)
 rek = Rektangel("ABCD", startpunkt, p2)
 tri = Triangel("ABC", startpunkt, p2, p3)
 print("\n")
+print(f"Cyrkel {cir.namn}s area är: {cir.area():.2f}")
 print(f"Rektangel {rek.namn}s area är: {rek.area():.2f}")
 print(f"Triangel {tri.namn}s area är: {tri.area():.2f}")
 print("\n")
