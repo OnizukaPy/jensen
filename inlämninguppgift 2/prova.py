@@ -1,6 +1,3 @@
-# https://savagerose.org/it/riconoscimento-di-immagini-in-python-con-tensorflow-e-keras/
-# https://www.rapidtables.com/web/color/RGB_Color.html
-
 from nis import cat
 from PIL import Image
 from numpy import asarray
