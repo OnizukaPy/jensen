@@ -7,7 +7,7 @@ import funktioner as f
 import matplotlib.pyplot as plt
 import os
 
-path = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/train2/" 
+path = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/train/" 
 
 # create list of filname of cats and dogs images 
 
@@ -34,7 +34,7 @@ for i in train_list_cat:
     x, y = cat0.set_color()
     punkt_list_cat.append([cat0.filnamn, x, y])   # ["cat.0.jpg", x, y]
 
-f.skriv_i_filen("Cat_list.csv", punkt_list_cat)
+f.skriv_i_filen("inlämninguppgift 2/Cat_list.csv", punkt_list_cat)
 
 for i in train_list_dog:
 
@@ -42,4 +42,4 @@ for i in train_list_dog:
     x, y = dog0.set_color()
     punkt_list_dog.append([dog0.filnamn, x, y])   # ["dog.0.jpg", x, y]
 
-f.skriv_i_filen("Dog_list.csv", punkt_list_dog)
+f.skriv_i_filen("inlämninguppgift 2/Dog_list.csv", punkt_list_dog)

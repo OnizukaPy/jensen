@@ -28,6 +28,38 @@ class image:
                     self.svart += 1
 
         return self.vit, self.svart
+    
+    def set_color2(self):
+
+        img = Image.open(self.path + self.filnamn)
+        img = img.convert("L")
+        img = img.resize((100,100))
+        self.matrix = asarray(img)
+        
+        for i in range(0, 30):
+            for j in range(0, 30):
+                if self.matrix[i][j] >= 128:
+                    self.vit += self.matrix[i][j]
+                else:
+                    self.svart += self.matrix[i][j]
+
+        return self.vit, self.svart    
+
+    def set_color3(self):
+
+        img = Image.open(self.path + self.filnamn)
+        img = img.convert("L")
+        img = img.resize((100,100))
+        self.matrix = asarray(img)
+        
+        for i in range(0, 100):
+            for j in range(0, 100):
+                if self.matrix[i][j] >= 192:
+                    self.vit += self.matrix[i][j]
+                elif self.matrix[i][j] <= 64:
+                    self.svart += self.matrix[i][j]
+
+        return self.vit, self.svart
 
     def show_matrix(self):
 

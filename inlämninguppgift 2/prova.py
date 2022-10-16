@@ -13,8 +13,8 @@ for namn in list_test:
 
     #print(f"\ncoordinaterna: ({coord[0]}, {coord[0]})\n")
 
-    Kat = f.läs_från_filen("Cat_list.csv")
-    Dog = f.läs_från_filen("Dog_list.csv")
+    Kat = f.läs_från_filen("inlämninguppgift 2/Cat_list.csv")
+    Dog = f.läs_från_filen("inlämninguppgift 2/Dog_list.csv")
 
     dist_cat_list = []
     dist_dog_list = []
@@ -53,12 +53,12 @@ for namn in list_test:
 
 # Plotting
 
-#for i in Kat:
-#    plt.plot(int(i[1]),int(i[2]), color="red", marker="o")
+for i in Kat:
+    plt.plot(int(i[1]),int(i[2]), color="red", marker="o")
 
-#for i in Dog:
-#    plt.plot(int(i[1]),int(i[2]), color="green", marker="o")
+for i in Dog:
+    plt.plot(int(i[1]),int(i[2]), color="green", marker="o")
 
 #plt.plot(coord[0], coord[1], color="yellow", marker="p")
 
-#plt.show()
+plt.show()
