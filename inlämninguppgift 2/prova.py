@@ -1,40 +1,64 @@
-from nis import cat
-from PIL import Image
-from numpy import asarray
+import funktioner as f
+import matplotlib.pyplot as plt
 import os
-import csv
 
-class image:
-    def __init__(self, path, filnamn):
-        self.filnamn = filnamn                # path eller filnamn
-        self.path = path
-        self.pixel_värde = 0            # värden av imgs pixel summa 
-        self.matrix = []
-        self.vit = 0
-        self.svart = 0
 
-    def set_color(self):
 
-        img = Image.open(self.path + self.filnamn)
-        img = img.convert("L")
-        img = img.resize((30,30))
-        self.matrix = asarray(img)
-        
-        for i in range(0, 30):
-            for j in range(0, 30):
-                if self.matrix[i][j] >= 128:
-                    self.vit += 1
-                else:
-                    self.svart += 1
+test = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/test2/"
+list_test = os.listdir(test)
 
-        return (self.vit, self.svart)
+for namn in list_test:
+    test_image = f.image(test, namn)
+    coord =  test_image.set_color()
 
-path= "/home/onizuka-host/Scaricati/material/dogs-vs-cats/train/" 
-name_cat = "cat.0.jpg"
-name_dog = "dog.10.jpg"
+    #print(f"\ncoordinaterna: ({coord[0]}, {coord[0]})\n")
 
-cat0 = image(path, name_cat)
-print(name_cat, cat0.set_color())
+    Kat = f.läs_från_filen("Cat_list.csv")
+    Dog = f.läs_från_filen("Dog_list.csv")
 
-dog0 = image(path, name_dog)
-print(name_dog, dog0.set_color())
+    dist_cat_list = []
+    dist_dog_list = []
+    for i in range(len(Kat)):
+        xc = int(Kat[i][1])
+        yc = int(Kat[i][2])
+        dist_cat = f.avstånd_punkt(coord, [xc, yc])
+        dist_cat_list.append(dist_cat)
+
+    for i in range(len(Dog)):
+        xd = int(Dog[i][1])
+        yd = int(Dog[i][2])
+        dist_dog = f.avstånd_punkt(coord, [xd, yd])
+        dist_dog_list.append(dist_dog)
+
+    cat_count = 0
+    dog_count = 0
+
+    #print(sorted(dist_cat_list))
+    #print(sorted(dist_dog_list))
+
+    for i in sorted(dist_cat_list)[0:2]:
+        for j in sorted(dist_dog_list)[0:2]:
+            if i < j:
+                cat_count += 1
+            else:
+                dog_count += 1
+
+
+    if cat_count > dog_count:
+        print(namn, "KAT")
+    elif dog_count > cat_count:
+        print(namn, "DOG")
+    else:
+        print(namn, "VET INTE")
+
+# Plotting
+
+#for i in Kat:
+#    plt.plot(int(i[1]),int(i[2]), color="red", marker="o")
+
+#for i in Dog:
+#    plt.plot(int(i[1]),int(i[2]), color="green", marker="o")
+
+#plt.plot(coord[0], coord[1], color="yellow", marker="p")
+
+#plt.show()
