@@ -3,18 +3,13 @@
 # https://savagerose.org/it/riconoscimento-di-immagini-in-python-con-tensorflow-e-keras/
 # https://www.rapidtables.com/web/color/RGB_Color.html
 
-import funktioner as f
+import new as nw
 import matplotlib.pyplot as plt
 import os
 import numpy as np
 
+
 path = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/train/" 
-
-kernel = np.array([ [1, 0, -1], 
-                    [1, 0, -1], 
-                    [1, 0, -1]])
-
-
 list_train = os.listdir(path)
 
 train_list_cat = []
@@ -34,16 +29,16 @@ punkt_list_dog = []
 
 for i in train_list_cat:
     print(i)
-    cat0 = f.image(path, i)
-    x, y = cat0.set_color2()
-    punkt_list_cat.append([cat0.filnamn, x, y])   # ["cat.0.jpg", x, y]
+    cat0 = nw.image(path, i)
+    matrix = cat0.show_matrix()
+    punkt_list_cat.append([cat0.filnamn, matrix])  
 
-f.skriv_i_filen("inlämninguppgift 2/Cat_list.csv", punkt_list_cat)
+nw.skriv_i_filen("inlämninguppgift 2/Cat_list.csv", punkt_list_cat)
 
 for i in train_list_dog:
     print(i)
-    dog0 = f.image(path, i)
-    x, y = dog0.set_color2()
-    punkt_list_dog.append([dog0.filnamn, x, y])   # ["dog.0.jpg", x, y]
+    dog0 = nw.image(path, i)
+    matrix = dog0.show_matrix()
+    punkt_list_dog.append([dog0.filnamn, matrix]) 
 
-f.skriv_i_filen("inlämninguppgift 2/Dog_list.csv", punkt_list_dog)
+nw.skriv_i_filen("inlämninguppgift 2/Dog_list.csv", punkt_list_dog)

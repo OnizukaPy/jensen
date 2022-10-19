@@ -1,40 +1,68 @@
 import new as nw
-import matplotlib.pyplot as plt
 import os
 import numpy as np
 
-test = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/test2/"
-list_test = os.listdir(test)
+path_train = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/train/" 
+list_train = os.listdir(path_train)
 
-accuracy = []
+path_test = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/test2/"
+list_test = os.listdir(path_test)
+
+# lista delle immagini di catti e cani
+train_list_cat = []
+train_list_dog = []
+
+for i in list_train:
+    
+    if "cat" in i:
+        train_list_cat.append(i)
+    elif "dog" in i:
+        train_list_dog.append(i)
+
+Kat = []
+Dog = []
+for i in train_list_cat:
+    cat0 = nw.image(path_train, i)
+    matrix =  cat0.show_matrix()
+    Kat.append(matrix)
+
+for i in train_list_dog:
+    dog0 = nw.image(path_train, i)
+    matrix =  dog0.show_matrix()
+    Dog.append(matrix)
+
+# lista delle immagini test
 for namn in list_test:
     
-    test_image = nw.image(test, namn)
+    test_image = nw.image(path_test, namn)
     matrix =  test_image.show_matrix()
-    
-    Kat = nw.läs_från_filen("inlämninguppgift 2/Cat_list.csv")
-    Dog = nw.läs_från_filen("inlämninguppgift 2/Dog_list.csv")
 
-    print(Kat[1])
+    # confronto
 
     dist_cat_list = []
     dist_dog_list = []
+
     for k in Kat:
         for i in range(30):
             for j in range(30):
-                xt = matrix[i][j]
-                xc = k[1][i][j]
+                xt = float(matrix[i][j])
+                xc = float(k[i][j])
                 dist_cat = abs(xt - xc)
                 dist_cat_list.append(dist_cat)
 
     for d in Dog:
         for i in range(30):
             for j in range(30):
-                xt = matrix[i][j]
-                xd = d[1][i][j]
+                xt = float(matrix[i][j])
+                xd = float(d[i][j])
                 dist_dog = abs(xt - xd)
                 dist_dog_list.append(dist_dog)
 
+    #print(dist_cat_list)
+    #print(dist_dog_list)
+
+    # prediction
+    accuracy = []
     cat_count = 0
     dog_count = 0
 
@@ -45,7 +73,7 @@ for namn in list_test:
             else:
                 dog_count += 1
 
-    
+
     if cat_count > dog_count:
         print(namn, "cat")
         accuracy.append([namn, "cat"])
