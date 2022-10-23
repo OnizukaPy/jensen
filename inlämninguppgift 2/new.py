@@ -1,41 +1,37 @@
 from PIL import Image
-from numpy import asarray
+from numpy import asarray, seterr
 from math import sqrt
 import csv
+seterr(over='ignore')
 
+def getImg(imgPath, scaled_size):
+    img = Image.open(imgPath)
+    img = img.resize((scaled_size, scaled_size))
+    img = img.convert('L')
+
+    return img
+
+def getDistance(Matrix1, Matrix2, scaled_size):
+
+    diffSquared = 0
+    for x in range (0, scaled_size):
+        for y in range (0, scaled_size):
+            
+            diffSquared += round(( (Matrix1[x][y] - Matrix2[x][y]) ** 2 ),2)
+
+    rms = round(sqrt(diffSquared), 2)
+
+    return rms
 class image:
-    def __init__(self, path, filnamn):
-        self.filnamn = filnamn                # path eller filnamn
-        self.path = path
-        self.matrix = []
+    def __init__(self, imgPath, filnamn, scaled_size):
 
-    def show_matrix(self):
+        self.filnamn = filnamn                
+        self.imgPath = imgPath
+        self.img = getImg(self.imgPath+self.filnamn, scaled_size)
 
-        img = Image.open(self.path + self.filnamn)
-        img = img.convert("L")
-        img = img.resize((30,30))
-        self.matrix = asarray(img)
+    def getMatrix(self):
+
+        self.matrix = asarray(self.img)
 
         return self.matrix
 
-def avstånd_punkt(a, b):
-
-    dist = sqrt((a-b)**2)
-
-    return round(dist, 2)
-
-def skriv_i_filen(namn, list):
-
-    with open(namn, 'w', newline='') as csvfile:
-        spamwriter = csv.writer(csvfile)
-        for i in list:
-            spamwriter.writerow(i)
-
-def läs_från_filen(namn):
-    temp = []
-    with open(namn, newline='') as csvfile:
-        spamreader = csv.reader(csvfile, delimiter=",")
-        for row in spamreader:
-            temp.append(row)
-
-    return temp

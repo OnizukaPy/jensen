@@ -3,6 +3,7 @@ from PIL import Image
 import numpy as np
 import csv
 import pprint
+import pandas as pd
 
 def skriv_i_filen(namn, list):
 
@@ -40,10 +41,14 @@ path = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/train/"
 name = "cat.1.jpg"
 img = Image.open(path+name)
 img = img.convert("L")
-img = img.resize((30,30))
+img = img.resize((20,20))
 #img.show()
-
 numpydata = np.asarray(img)
+df = pd.DataFrame(numpydata)
+df["1"] = 0
+
+print(df)
+
 
 kernel = np.array([  [1, 0, -1], 
                 [1, 0, -1], 

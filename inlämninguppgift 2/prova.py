@@ -3,62 +3,65 @@ import matplotlib.pyplot as plt
 import os
 import numpy as np
 
-test = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/test2/"
-list_test = os.listdir(test)
+path_test = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/test2/"
+list_test = os.listdir(path_test)
 
-accuracy = []
+#print(list_test)
+
+path_train = "/home/onizuka-host/Scaricati/material/dogs-vs-cats/train/" 
+list_train = os.listdir(path_train)
+
+train_list_cat = []
+train_list_dog = []
+
+for i in list_train:
+    
+    if "cat" in i:
+        train_list_cat.append([path_train, i])
+    elif "dog" in i:
+        train_list_dog.append([path_train, i])
+
+"""print("\n")
+print(train_list_cat)
+print("\n")
+print(train_list_dog)
+print("\n")"""
+
+print("\n")
+
 for namn in list_test:
+    knn = 0
+    dist_cat = []
+    dist_dog = []
     
-    test_image = nw.image(test, namn)
-    matrix =  test_image.show_matrix()
+    test_image = nw.image(path_test, namn, 30)
+    matrix =  test_image.getMatrix()
     
-    Kat = nw.läs_från_filen("inlämninguppgift 2/Cat_list.csv")
-    Dog = nw.läs_från_filen("inlämninguppgift 2/Dog_list.csv")
-
-    print(Kat[1])
-
-    dist_cat_list = []
-    dist_dog_list = []
-    for k in Kat:
-        for i in range(30):
-            for j in range(30):
-                xt = matrix[i][j]
-                xc = k[1][i][j]
-                dist_cat = abs(xt - xc)
-                dist_cat_list.append(dist_cat)
-
-    for d in Dog:
-        for i in range(30):
-            for j in range(30):
-                xt = matrix[i][j]
-                xd = d[1][i][j]
-                dist_dog = abs(xt - xd)
-                dist_dog_list.append(dist_dog)
-
-    cat_count = 0
-    dog_count = 0
-
-    for i in sorted(dist_cat_list)[0:3]:
-        for j in sorted(dist_dog_list)[0:3]:
-            if i < j:
-                cat_count += 1
-            else:
-                dog_count += 1
-
     
-    if cat_count > dog_count:
-        print(namn, "cat")
-        accuracy.append([namn, "cat"])
-    elif dog_count > cat_count:
-        print(namn, "dog")
-        accuracy.append([namn, "dog"])
-    else:
-        print(namn, "x")
-        accuracy.append([namn, "x"])
+    for j in train_list_cat:
+        path = j[0]
+        name = j[1]
+        img2 = nw.image(path, name, 30)
+        d = nw.getDistance(matrix, img2.getMatrix(), 30)
+        #print([d, name])
+        dist_cat.append([d, name])
 
-count = 0
-for i in accuracy:
-    if i[1] in i[0]:
-        count += 1
-
-print(f"{count/len(accuracy)*100:.2f}%")
+    for j in train_list_dog:
+        path = j[0]
+        name = j[1]
+        img2 = nw.image(path, name, 30)
+        d = nw.getDistance(matrix, img2.getMatrix(), 30)
+        #print([d, name])
+        dist_dog.append([d, name])
+    
+    knn = sorted(dist_cat + dist_dog)
+    count = 0
+    k = 15
+    for i in range(0, k):
+        if "cat" in knn[i][1]:
+            count += 1
+    print(f"{namn} kunde vara {count/len(knn[:k])*100:.0f}% en Kat och {(len(knn[:k])-count)/len(knn[:k])*100:.0f}% en Hund")
+    #print(namn ,knn[:2])
+    
+    
+  
