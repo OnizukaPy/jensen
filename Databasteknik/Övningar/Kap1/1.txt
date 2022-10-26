@@ -1,0 +1,54 @@
+Ö1) Vad betyder begreppet ”DATA”?
+
+Data är uppgifter av olika slag. 
+
+Ö2) Vad skiljer betydelsen av begreppet ”DATA” från betydelsen av begreppet ” INFORMATION”?
+
+Data är en fakt och Information är en tolkning av data
+
+Ö3) Vad skiljer betydelsen av begreppet ”INFORMATION” från betydelsen av begreppet ”KUNSKAP”?
+
+Kunskap är hur Information har användts.
+
+Ö4) Definierad begreppet ”DATABAS”
+
+Databas äe en samling data som hör ihop, som modellerar en del av världen 
+och är persistent, dvs inte försvinner när man avslutar programmet eller stänger av datorn.
+Den ha ett schema, dvs det ska finnas en explicit beskrivning av vad det är för data,
+vara konsistent eller logiskt koherent, dvs den får inte innehålla motsägelser.
+Åtminstone i det följande antar vi också att databasen lagras och hanteras av en dator.
+
+Ö5) Vad betyder begreppet ”Database management systems” (DBMS)?
+
+Det är ett programm som har till uppgift att lagra och hantera databaser.
+
+Ö6) Ge tre exempel på olika DBMS
+
+SQL, MS Access, Oracle 
+
+Ö7) Ge exempel på tre implementations modeller för databaser
+
+De vanligaste implementationsmodellerna numera är relationsmodellen och olika objektorienterade
+modeller. Tidigare var den hierarkiska datamodellen och nätverksmodellen vanliga.
+
+Ö8) Ge tre exempel på administrativa system som använder databaser
+
+databasböcker, 
+kundregister, 
+studentdatabase
+
+Ö9) Ge tre exempel på tekniska system som använder databaser
+
+CAD-system ("Computer-Aided Design"), 
+CASE-system ("Computer-Aided Software Engineering"), 
+telefonväxlar
+
+Ö10) Beskriv med en bild användningen och användare av DBMS
+
+ - databaseanvändare som läser databas för att tolka data till information
+
+databaseanvändare -> databassystem -> skriva ut data eller informationerna 
+
+ - databashanterare som skapa databas eller ladda till data och informarionerna
+
+databashanterare -> databassystem -> spara data eller information i databas
