@@ -1,0 +1,62 @@
+Grupp A
+
+    Nederländerna
+    Senegal
+    Ecuador
+    Qatar
+
+
+Grupp B
+
+    England
+    Wales
+    USA
+    Iran
+
+
+Grupp C
+
+    Argentina
+    Polen
+    Mexiko
+    Saudiarabien
+
+
+Grupp D
+
+    Frankrike
+    Danmark
+    Tunisien
+    Australien
+
+
+Grupp E
+
+    Spanien
+    Tyskland
+    Japan
+    Costa Rica
+
+
+Grupp F
+
+    Belgien
+    Kroatien
+    Marocko
+    Kanada
+
+
+Grupp G
+
+    Brasilien
+    Schweiz
+    Serbien
+    Kamerun
+
+
+Grupp H
+
+    Portugal
+    Uruguay
+    Sydkorea
+    Ghana

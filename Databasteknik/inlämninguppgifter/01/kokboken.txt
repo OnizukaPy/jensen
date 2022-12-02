@@ -1,0 +1,42 @@
+Din uppgift är att skapa en databas för VM i fotboll.
+I VM deltar 32 lag som representerar sitt land. Lagen är uppdelade i 8
+grupper, där alla möter alla möter alla i en grundomgång. Databasen
+skall bara innehålla data från denna grundomgång.
+En match spelas på ett datum, i en arena. Resultatet från matcher skall
+laggars i databasen med 3 poäng till laget som vinner, 1 poängen till
+vardera lagen vid oavgjort, samt 0 poäng till laget som förlorar. Även
+målskillnad till registreras.
+
+Varje match leds av en domare, vars namn också skall lagras
+
+----------
+Entiteter
+----------
+
+ - LAGER: `namn` som primary key. Det finns bara det här attribut eftersom namn är unik för varje land. det behövs inte en INT id.
+ - GRUPP: `namn` som primary key. Det finns bara det här attribut eftersom namn är unik för varje grupp. Det finns bara 8 grupper. det behövs inte en INT id.
+ - STADIUM: `id` som primary key, `stad`, `namn` och `kapacitet` som andra attribut.
+ - MATCH: `id`, som primary key eftersom det behöver en nyckel för att ordna matcher; `n_match`, eftersom varje match har 2 lag men de kan inte lägga till i samma rad, så använder jag det här attribut för att säga att i samma match det finns 2 lager; resultatet är en sammansatta attribut av två olika attribut: poang och skilnad mäl, som är också en sammansatta attribut av två atribut: gjorda_mål och insläppta_mål;`arena`och `datum` är attribut beskriva platsen och datum av matchen.
+ - DOMARE: `id` som primary key och `namn`, `efternamn` och `land` som svaga atribut.
+ 
+-----------
+Relationer
+-----------
+
+ - Lager är uppdelade i 8 grupper: (Lager) N:1 (grupp)
+ 
+ det här betyder att `Grupp.namn` är FK av lagers tabellen.
+ 
+ - Match har en domare: (Match) N:1 (Domare)
+
+ det här betyder att `Domare.namn` är FK av matchs tabellen.
+ 
+ - Match har ett stadium: (Match) N:1 (Stadium)
+
+ det här betyder att `Stadium.id` är FK av matchs tabellen.
+ 
+ - Två lager spelar en match på ett datum och i en arena: (Lager) 1:N (Match)
+
+ det här betyder att `Lager.namn` är FK av matchs tabellen.
+
+

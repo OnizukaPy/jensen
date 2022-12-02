@@ -13,23 +13,23 @@ Kunskap är hur Information har användts.
 Ö4) Definierad begreppet ”DATABAS”
 
 Databas äe en samling data som hör ihop, som modellerar en del av världen 
-och är persistent, dvs inte försvinner när man avslutar programmet eller stänger av datorn.
-Den ha ett schema, dvs det ska finnas en explicit beskrivning av vad det är för data,
-vara konsistent eller logiskt koherent, dvs den får inte innehålla motsägelser.
+och är persistent, dvs (det vill säga) inte försvinner när man avslutar programmet eller stänger av datorn.
+Den har ett schema, dvs det ska finnas en explicit beskrivning av vad det är för data,
+Den är konsistent eller logiskt koherent, dvs den får inte innehålla motsägelser.
 Åtminstone i det följande antar vi också att databasen lagras och hanteras av en dator.
 
 Ö5) Vad betyder begreppet ”Database management systems” (DBMS)?
 
-Det är ett programm som har till uppgift att lagra och hantera databaser.
+Det är ett programm eller ett system som har till uppgift att lagra och hantera databaser.
 
 Ö6) Ge tre exempel på olika DBMS
 
-SQL, MS Access, Oracle 
+MySQL, MS Access, Oracle 
 
 Ö7) Ge exempel på tre implementations modeller för databaser
 
-De vanligaste implementationsmodellerna numera är relationsmodellen och olika objektorienterade
-modeller. Tidigare var den hierarkiska datamodellen och nätverksmodellen vanliga.
+De vanligaste implementationsmodellerna numera är relationsmodellen som går up på att man lagrar data i tabeller.
+Dessutom har det dykt upp olika typer av objektorienterade modeller och hieratiska datamodeller och nätverksmodellen.
 
 Ö8) Ge tre exempel på administrativa system som använder databaser
 
