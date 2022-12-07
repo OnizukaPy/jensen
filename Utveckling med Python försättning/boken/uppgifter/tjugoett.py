@@ -1,0 +1,3 @@
+# Module tjugoett
+import kortlek
+
