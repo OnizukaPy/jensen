@@ -5,8 +5,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy_utils import database_exists, create_database
 
 # Create database
-
-engine = create_engine('sqlite:///ivan.db')
+engine = create_engine('sqlite:///Utveckling med Python försättning/inlämninguppgifter/ivan.db')
 
 session = sessionmaker(bind=engine)()
 Base = declarative_base()
