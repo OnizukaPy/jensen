@@ -17,7 +17,7 @@ import os
 import PySimpleGUI as sg
 
 #---------------------------
-# FUNCTIONS
+# FUNCTIONS - SQL
 #---------------------------
 
 # to insert data value
@@ -85,22 +85,22 @@ def find_last_id(table):
     return i
 
 # delete database
-def delete_db(db_namn):
+def delete_db(path, db_namn):
     '''
     db_namn = name of the database
     '''
-    file_list = os.listdir('.')
+    file_list = os.listdir(path)
 
     #for file in file_list:
     if db_namn in file_list:
         try:
-            os.remove(db_namn)
+            os.remove(path+db_namn)
         except OSError as e:
-            print(e)
+            return e
         else:
-            print("File is deleted successfully")
+            return "File is deleted successfully"
     else:
-        print("Database is not in the directory")
+        return "Database is not in the directory"
 
 # To delete data
 def delete_from_db(table, id):
@@ -118,8 +118,67 @@ def show_row_from_db(table):
     table = name of the table in the database
     '''
     db = select(table)
+    temp = ''
     for row in session.scalars(db):
-        print(row)
+        temp = temp + str(row) + '\n'
+    
+    if temp == '':
+        return 'No results'
+    else:
+        return temp
+
+
+# To do query into the database attribut namn
+def query_in_db(table, sql_query):
+    '''
+    table = name of the table in the database
+    sql_query = the query to search
+    '''
+    query = select([table]).where(table.namn.in_([sql_query]))
+    temp = ''
+    for row in session.scalars(query):
+        temp = temp + str(row) + '\n'
+    
+    if temp == '':
+        return 'No results'
+    else:
+        return temp
+
+#---------------------------
+# FUNCTIONS - SIMPLEGUI
+#---------------------------
+
+# Window´s functions
+
+# Clear
+def clear(window):
+    window['-NN-'].update('')
+    window['-EFNN-'].update('')
+    window['-MEDN-'].update('')
+    window['-GA-'].update('')
+    window['-POSTN-'].update('')
+    window['-POSTA-'].update('')
+    window['-ORT-'].update('')
+    window['-AVG-'].update('')
+
+# Send
+def send_data_to_database(table, values):
+        md = table(
+            id=find_last_id(table)+1, 
+            namn=values['-NN-'], 
+            efternamn=values['-EFNN-'],
+            medlemsnummer=values['-MEDN-'], 
+            gatuadress=values['-GA-'], 
+            postnummer=int(values['-POSTN-']), 
+            postadress=int(values['-POSTA-']),
+            ort=values['-ORT-'],
+            avgift=values['-AVG-']
+            )
+
+        print(md)
+        print(values)
+        session.add_all([md])
+        session.commit()
 
 # To insert data with a simple user interface
 def insert_data_from_interface(table):
@@ -130,15 +189,17 @@ def insert_data_from_interface(table):
 
     layout = [
         [sg.Text('Please enter data into the table')],        
-        [sg.Text('Namn', size=(15, 1)), sg.InputText()],            
-        [sg.Text('Efternamn', size=(15, 1)), sg.InputText()],         
-        [sg.Text('Medlemsnummer', size=(15, 1)), sg.InputText()], 
-        [sg.Text('Gatuadress', size=(15, 1)), sg.InputText()],
-        [sg.Text('Postnummer', size=(15, 1)), sg.InputText()],
-        [sg.Text('Postadress', size=(15, 1)), sg.InputText()],
-        [sg.Text('Ort', size=(15, 1)), sg.InputText()],  
-        [sg.Text('Avgift Y/N', size=(15, 1)), sg.InputText()],   
-        [sg.Submit(), sg.Cancel()]                                  
+        [sg.Text('Namn', size=(15, 1)), sg.InputText(key='-NN-')],            
+        [sg.Text('Efternamn', size=(15, 1)), sg.InputText(key='-EFNN-')],         
+        [sg.Text('Medlemsnummer', size=(15, 1)), sg.InputText(key='-MEDN-')], 
+        [sg.Text('Gatuadress', size=(15, 1)), sg.InputText(key='-GA-')],
+        [sg.Text('Postnummer', size=(15, 1)), sg.InputText(key='-POSTN-')],
+        [sg.Text('Postadress', size=(15, 1)), sg.InputText(key='-POSTA-')],
+        [sg.Text('Ort', size=(15, 1)), sg.InputText(key='-ORT-')],  
+        [sg.Text('Avgift Y/N', size=(15, 1)), sg.InputText(key='-AVG-')],  
+        #[sg.In(key='-IN-')], 
+        #[sg.Output(size=(50,10), key='-OUTPUT-')],
+        [sg.Button('Save and exit'), sg.Cancel(), sg.Button('Save and continue'), sg.Button('Clear'), sg.Button('Random')]                                  
     ]
 
     window = sg.Window('Simple data entry window', layout)
@@ -149,35 +210,95 @@ def insert_data_from_interface(table):
         if event == 'Cancel' or event == sg.WIN_CLOSED: 
             print('You have not insert data into the table')
             break
-        else:
-            md = table(
-                id=find_last_id(Medlem)+1, 
-                namn=values[0], 
-                efternamn=values[1],
-                medlemsnummer=values[2], 
-                gatuadress=values[3], 
-                postnummer=int(values[4]), 
-                postadress=int(values[5]),
-                ort=values[6],
-                avgift=values[7]
-                )
+        elif event == 'Clear':
+            clear(window)
 
-            print(md)
-            session.add_all([md])
-            session.commit()
+        elif event == 'Save and continue':
+            send_data_to_database(table, values)
+            clear(window)
+
+        elif event == 'Random':
+            insert_random(table, find_last_id(table), 10)
+
+        else:
+            send_data_to_database(table, values)
+            break
+
+        
+    window.close()
+
+# To delete roe into the table
+def delete_from_db_with_interface(table):
+    '''
+    table = name of the table in the database
+    '''
+    sg.theme('Topanga')
+    layout = [
+        [sg.Text('Please enter id')],        
+        [sg.Text('id', size=(15, 1)), sg.InputText(key='-ID-')],
+        [sg.Button('Ok'), sg.Cancel(), sg.Button('Last Row'), sg.Button('Clear')]                                  
+    ]
+
+    window = sg.Window('Delete row from database with id', layout)
+    while True:
+
+        event, values = window.read()
+
+        if event == 'Cancel' or event == sg.WIN_CLOSED: 
+            break
+        elif event == 'Last Row':
+            delete_from_db(table, find_last_id(table))
+            break
+        elif event == 'Ok':
+            delete_from_db(table, values['-ID-'])
+            break
+        elif event == 'Clear':
+            window['-ID-'].update('')
+        
+    window.close()
+
+def query(table):
+    '''
+    table = name of the table in the database
+    '''
+    layout = [
+        [sg.Text("Query: "), sg.Input(key='-QUERY-')],
+        [sg.Ok(), sg.Button('Show')],
+        [sg.Text("", key='OUTPUT')]
+    ]
+
+    window = sg.Window("Just a window", layout)
+
+    while True:
+        event, values = window.read()
+        if event == sg.WINDOW_CLOSED:
+            break
+        elif event == 'Ok':
+            name = values['-QUERY-']
+            temp = query_in_db(table, name)
+            window['OUTPUT'].update(value=temp)
+        elif event == 'Show':
+            name = show_row_from_db(table)
+            window['OUTPUT'].update(value=name)
 
     window.close()
 
 #---------------------------
-# SQL 
+# SCRIPT - SQL 
 #---------------------------
 
 # Database's data
-
 db_namn = 'Medlemsregister.db'
+path = '/home/onizuka-host/Zoho WorkDrive (Catalano Consulenze Tecniche)/My Folders/Documenti personali_/Corsi/Scuola di Python con Jensen/Esercizi/jensen/Utveckling med Python försättning/inlämninguppgifter/'
+print(delete_db(path, db_namn))
 
-# Create database
+# Create engine
 engine = create_engine('sqlite:///Utveckling med Python försättning/inlämninguppgifter/'+db_namn)
+
+# Create connection for quering
+connection = engine.connect()
+
+# Initiate session
 
 session = sessionmaker(bind=engine)()
 Base = declarative_base()
@@ -190,13 +311,14 @@ class Medlem(Base):
     id = Column(Integer, primary_key=True)
     namn = Column(String(255))
     efternamn = Column(String(255))
-    medlemsnummer = Column(Integer)
+    medlemsnummer = Column(String(255))
     gatuadress = Column(String(255))
     postnummer = Column(Integer)
     postadress = Column(Integer)
     ort = Column(String(255))
+    avgift = Column(String(1))
 
-    def __init__(self, id, namn, efternamn, medlemsnummer, gatuadress, postnummer, postadress, ort):
+    def __init__(self, id, namn, efternamn, medlemsnummer, gatuadress, postnummer, postadress, ort, avgift):
 
         self.id = id
         self.namn = namn
@@ -206,16 +328,50 @@ class Medlem(Base):
         self.postnummer = postnummer
         self.postadress = postadress
         self.ort = ort
-    
+        self.avgift = avgift
+
     def __repr__(self) -> str:
         return f"Medlem({self.id!r}, {self.namn!r}, {self.efternamn!r},{self.medlemsnummer!r}, {self.gatuadress!r} {self.postnummer!r} {self.ort!r}, Betalt avgift? {self.avgift!r})"
 
+# Create database with tables
 Base.metadata.create_all(engine)
 
 #---------------------------
 # SCRIPT
 #---------------------------
 
+# Main window
+sg.theme('Topanga')
+layout = [
+    [sg.Button('Insert data'), sg.Button('Delete data'), sg.Button('Do a query')],
+    #[sg.Button('Delete database')],
+    [sg.Text("", key='OUTPUT')],
+    [sg.Button('Cancel')]
+    ]
+
+window = sg.Window('Simple window', layout)
+
+while True:
+
+    event, values = window.read()
+    if event == 'Delete database':
+        text = delete_db(path, db_namn)
+        window['OUTPUT'].update(value=text)
+    elif event == 'Insert data':
+        insert_data_from_interface(Medlem)
+    
+    elif event == 'Delete data':
+        delete_from_db_with_interface(Medlem)
+
+    elif event == 'Do a query':
+        query(Medlem)
+    
+    elif event == 'Cancel' or event == sg.WIN_CLOSED:
+        break
+
+window.close()
+
+'''
 # Insert random data
 insert_random(Medlem, 0, 100)
 
@@ -225,6 +381,12 @@ insert_data_from_keyboard(Medlem)
 # Use grafic interface for insert data
 insert_data_from_interface(Medlem)
 
+# Use grafic interface for delete data
+delete_from_db_with_interface(Medlem)
+
+# Search into the database with interface
+query_in_db(Medlem)
+
 # Show table's data
 show_row_from_db(Medlem)
 
@@ -233,7 +395,7 @@ delete_from_db(Medlem, find_last_id(Medlem))
 
 # Delete DB
 delete_db(db_namn)
-
+'''
 
 
 
