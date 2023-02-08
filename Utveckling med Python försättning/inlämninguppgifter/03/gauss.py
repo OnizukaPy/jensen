@@ -62,9 +62,6 @@ def solve_gauss(a, b):
     n=len(b)
     x = np.zeros(n)
     for i in range(n-1, -1, -1):
-        #print('i+1:n:', f'{i+1}:{n}')
-        #print('a[i, i+1:n]:', a[i, i+1:n])
-        #print('x[i+1:n]:', x[i+1:n])
         x[i] = (b[i] - np.dot(a[i, i+1:n], x[i+1:n]))/a[i, i]
 
     return x
