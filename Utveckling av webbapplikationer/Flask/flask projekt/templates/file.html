@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<html>
+
+<body>
+    <h1>File uploaded</h1>
+    <p>File name: {{ name }}</p>
+    <p>File type: {{ filetype }}</p>
+    <p>File format: {{ fileformat }}</p>
+    <p>File size: {{ filesize }} byte</p>
+    <p>File path: {{ filepath }}</p>
+    <p>File content:</p>
+    <img src="{{ url_for('static', filename=filename) }}">
+</body>
+    
+
+</html>
