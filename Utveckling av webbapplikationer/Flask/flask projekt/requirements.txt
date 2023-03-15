@@ -2,3 +2,4 @@ flask
 werkzeug
 os
 pillow
+requests
