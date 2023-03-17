@@ -2,16 +2,46 @@
 
 <html>
 
+<head>
+    <title>File uploaded</title>
+</head>
+
 <body>
+
+    <style>
+
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+    </style>
+    <!-- 
+        lista av alla variabler som skickas från python code i app.py route /uploader
+    -->
     <h1>File uploaded</h1>
-    <p>File name: {{ name }}</p>
-    <p>File type: {{ filetype }}</p>
-    <p>File format: {{ fileformat }}</p>
-    <p>File size: {{ filesize }} byte</p>
-    <p>File path: {{ filepath }}</p>
-    <p>File content:</p>
-    <img src="{{ url_for('static', filename=filename) }}">
+    <p>File name: {{ name }}</p>            <!-- namnfilen -->
+    <p>File type: {{ filetype }}</p>        <!-- filtypen -->
+    <p>File format: {{ fileformat }}</p>    <!-- filformatet -->
+    <p>File size: {{ filesize }} byte</p>   <!-- filstorleken -->   
+    <p>File path: {{ filepath }}</p>        <!-- filens sökväg -->
+    <p>File content:</p>                    <!-- filens innehåll -->
+    <img src="{{ url_for('static', filename=filename) }}"> <!-- bildfilen -->
+
+    <h1><a href="/" target="_self">Om du vill ladda upp en ny bildfil knappa här</a></h1>
 </body>
-    
 
 </html>
