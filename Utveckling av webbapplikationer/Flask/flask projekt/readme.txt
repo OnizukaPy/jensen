@@ -2,6 +2,8 @@ FLASK MINIPROJEKT
 
 Gruppsmedlemar = Ivan, Bruno
 
+github repo: https://github.com/OnizukaPy/jensen/tree/main/Utveckling%20av%20webbapplikationer/Flask/flask%20projekt
+
 Istruktioner:
 
 1 - exekvera pip install -r requirements.txt
