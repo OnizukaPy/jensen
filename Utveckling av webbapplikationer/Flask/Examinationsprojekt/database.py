@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String
-from sqlalchemy import select, delete
+from sqlalchemy import select
 
 import os
 import pandas as pd
@@ -10,13 +10,6 @@ import pandas as pd
 ###############
 ## Functions ##
 ###############
-
-def open_db(path, db_namn):
-    engine = create_engine('sqlite:///'+ path + db_namn)
-    connection = engine.connect()
-    session = sessionmaker(bind=engine)()
-    Base = declarative_base()
-    return engine, connection, session, Base
 
 # delete database
 def delete_db(path, db_namn):
@@ -35,7 +28,7 @@ def delete_db(path, db_namn):
             return "File is deleted successfully"
     else:
         return "Database is not in the directory"
-    
+
 # to find last_id in the table
 def find_last_id(table):
     '''
@@ -48,20 +41,6 @@ def find_last_id(table):
 
     return i
 
-def update_user(path, filename, table):
-    '''
-    df = dataframe with the new data
-    '''
-    engine.execute(delete(table))
-    df = pd.read_csv(path + filename)
-    for i in range(len(df)):
-        name = df['Name'][i]
-        mail = df['Mail'][i]
-        password = df['Password'][i]
-        DataFromKb(table, name, mail, password)
-    return df
-
-
 ##########
 ## Main ##
 ##########
@@ -71,8 +50,15 @@ db_namn = 'pizzeria.db'
 path = 'Utveckling av webbapplikationer/Flask/Examinationsprojekt/'
 print(delete_db(path, db_namn))
 
-# Open database
-engine, connection, session, Base = open_db(path, db_namn)
+# Create engine
+engine = create_engine('sqlite:///'+ path + db_namn)
+
+# Create connection for quering
+connection = engine.connect()
+
+# Initiate session
+session = sessionmaker(bind=engine)()
+Base = declarative_base()
 
 # Create Tables
 class Users(Base):
@@ -108,17 +94,17 @@ class Admin(Base):
         self.password = password
 
 class Pizzas(Base):
-    
+
         __tablename__ = "Pizzas"
-    
+
         id = Column(Integer, primary_key=True)
         name = Column(String(255))
         price = Column(String(255))
         size = Column(Integer)
         toppings = Column(String(255))
-    
+
         def __init__(self, id, name, price, size, toppings):
-    
+
             self.id = id
             self.name = name
             self.price = int(price)
@@ -162,11 +148,10 @@ def DataFromKb(table, name, mail, password):
     session.commit()
 
 # to insert administrator data value
-admin = pd.DataFrame([['Ivan', 'admin@admin.it', 'Admin123']], columns=['Name', 'Mail', 'Password'])
-admin.to_csv(path + 'admin.csv', index=False)
-user = pd.DataFrame([['prova', 'prova@prova.it', 'prova']], columns=['Name', 'Mail', 'Password'])
-user.to_csv(path + 'users.csv', index=False)
+DataFromKb(Admin, 'Ivan', 'admin@admin.it', 'Admin123')
 
+# to insert first user data value
+DataFromKb(Users, 'prova', 'prova@prova.it', 'prova')
 
 # to insert pizza data value
 df = pd.read_csv(path + 'pizzeria.csv')
