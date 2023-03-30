@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
+    <title>User Page</title>
+    <h1>Home</h1>
+    <p>{{msg}}</p>
+{% endblock %}
+
+{% block navbar %}
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
+    <a href="/" class="w3-bar-item w3-button">Home Pizzeria Ivan</a>
+    <!-- Right-sided navbar links. Hide them on small screens -->
+    <div class="w3-right w3-hide-small">
+
+      <a href="/logout" class="w3-bar-item w3-button">Logout</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<!-- Page content -->
+<div class="w3-content" style="max-width:1100px">
+
+</div>
+
+{% endblock %}
