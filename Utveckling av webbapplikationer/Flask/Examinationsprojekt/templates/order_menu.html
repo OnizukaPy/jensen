@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/order.css') }}">
+    <title>Order Page</title>
+{% endblock %}
+
+{% block navbar %}
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
+    <a href="/" class="w3-bar-item w3-button">Home Pizzeria Ivan</a>
+    <!-- Right-sided navbar links. Hide them on small screens -->
+    <div class="w3-right w3-hide-small">
+      <a href="/logout" class="w3-bar-item w3-button">Logout</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<script src="{{ url_for('static', filename='javascript/validate_order.js') }}"></script> 
+
+  <!-- Menu Section -->
+  <div class="w3-row w3-padding-64">
+    <div class="w3-col l6 w3-padding-large">
+            <h1 class="w3-center">Our Menu</h1><br>
+
+            <h4>Pizzas</h4>
+            <table style="width:100%">
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Size</th>
+                  <th>Price</th>
+                </tr>
+                {% for pizza in pizzas %}
+                <tr>
+                  <td>{{pizza[0]}}</td>
+                  <td>{{pizza[3]}}</td>
+                  <td>{{pizza[2]}}</td>
+                  <td>{{pizza[1]}}€</td>
+                </tr>
+                {% endfor %}
+
+              </table>
+        </div>
+    </div>
+    
+    <!-- order Form -->
+    <div class="w3-col l6 w3-padding-large">
+      <h2 style="text-align: center;">Chois the pizza to order</h2><br>
+        <form method="post" name="form_order">
+            <label for="pizza"><b>Chois the pizza</b></label>
+            <input list="names" name="pizza" required>
+              <datalist id="names">
+                {% for pizza in pizzas %}
+                  <option value="{{pizza[0]}}"></option>
+                {% endfor %}
+
+              </datalist>
+
+            <label for="quantity"><b>How many?</b></label>
+            <input type="number" id="quantity" name="quantity" min="0" max="100" step="1" value="1">
+                
+            <button type="button" onClick="validateOrder()">Order</button>
+
+        </form>
+    </div>
+  </div>
+
+{% endblock %}

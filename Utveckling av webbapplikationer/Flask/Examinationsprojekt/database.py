@@ -1,20 +1,32 @@
+# import libraries and modules needed for the program 
+# importing of sqlalchemy to create a database
+
 from sqlalchemy import *
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, Date, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
+
+# importing of os to create a path to the database
 import os
 
-PATH = '/home/onizuka-host/Zoho WorkDrive (Catalano Consulenze Tecniche)/My Folders/Documenti personali_/Corsi/Scuola di Python con Jensen/Esercizi/jensen/Utveckling av webbapplikationer/Flask/Examinationsprojekt/'
+# creating a path to the database
+PATH = os.path.abspath(os.path.dirname(__file__)) + '/'
+
+# creating a name for the database
 DBNAME = 'pizzeria.db'
+
+# creating a sqlpath to the database
 SQLLITE = 'sqlite:///'+PATH+DBNAME
+
+# printing the path to the database to check if the path is correct
 print(PATH+DBNAME)
 
 ###############
 ## Functions ##
 ###############
 
-# delete database
+# this function deletes the database if it is in the directory
 def delete_db(path, db_namn):
     '''
     db_namn = name of the database
@@ -37,16 +49,14 @@ def delete_db(path, db_namn):
 ## Main ##
 ##########
 
-# Database's data
+# check if database is in the directory and delete it
 print(delete_db(PATH, DBNAME))
 
-# Create engine
-engine = create_engine(SQLLITE, echo=True)
+# start the database creation
+engine = create_engine(SQLLITE, echo=True)      # Create engine
+Base = declarative_base()                       # Create declarative base
 
-# Create session
-Base = declarative_base()
-
-# Create Tables
+# Create Tables in the database
 class Users(Base):
 
     __tablename__ = "Users"

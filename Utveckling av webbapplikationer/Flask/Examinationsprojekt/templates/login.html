@@ -4,8 +4,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
     <title>Login Page</title>
-    <h1>Home</h1>
-    <p>Home page</p>
 {% endblock %}
 
 {% block navbar %}
@@ -15,7 +13,7 @@
     <a href="/" class="w3-bar-item w3-button">Home Pizzeria Ivan</a>
     <!-- Right-sided navbar links. Hide them on small screens -->
     <div class="w3-right w3-hide-small">
-      <a href="/login" class="w3-bar-item w3-button">Login</a>
+      <!-- insert here side button menu -->
     </div>
   </div>
 </div>
@@ -27,8 +25,10 @@
 
 <!-- Page content -->
 <div class="w3-content" style="max-width:1100px">
+  
   <!-- Login Form -->
   <div class="w3-row w3-padding-64">
+    <h1 style="text-align: center;">Log in to order your pizza</h1>
       <form method="post" name="form_login">
 
           <img src="{{ url_for('static', filename='img/user.png') }}" alt="user" class="avatar">
