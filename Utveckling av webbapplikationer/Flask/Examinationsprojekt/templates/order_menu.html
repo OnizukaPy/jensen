@@ -23,13 +23,15 @@
 
 <script src="{{ url_for('static', filename='javascript/validate_order.js') }}"></script> 
 
+<h1 style="text-align: center;">Welcome {{msg}}</h1>
+
   <!-- Menu Section -->
   <div class="w3-row w3-padding-64">
     <div class="w3-col l6 w3-padding-large">
             <h1 class="w3-center">Our Menu</h1><br>
 
             <h4>Pizzas</h4>
-            <table style="width:100%">
+            <table style="width:100%" name="cart_1">
                 <tr>
                   <th>Name</th>
                   <th>Description</th>
@@ -42,13 +44,17 @@
                   <td>{{pizza[3]}}</td>
                   <td>{{pizza[2]}}</td>
                   <td>{{pizza[1]}}€</td>
+
                 </tr>
                 {% endfor %}
 
-              </table>
+            </table>
         </div>
     </div>
     
+
+
+
     <!-- order Form -->
     <div class="w3-col l6 w3-padding-large">
       <h2 style="text-align: center;">Chois the pizza to order</h2><br>

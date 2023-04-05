@@ -7,6 +7,8 @@ from flask import Flask, flash, redirect, render_template, request, session, abo
 
 # importing of sqlalchemy to read and modify the database
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import exists
+from sqlalchemy import select
 
 # importing of the database and functions from the database.py file
 from database import *
@@ -30,15 +32,36 @@ def list_pizza():
     price_pizzas = []
     size_pizzas = []
     toppings_pizzas = []
+    id_pizzas = []
     for row in result_pizzas:
         name_pizzas.append(row.name)
         price_pizzas.append(row.price)
         size_pizzas.append(row.size)
         toppings_pizzas.append(row.toppings)
+        id_pizzas.append(row.id)
     list_pizzas = []
     for i in range(len(name_pizzas)):
-        list_pizzas.append([name_pizzas[i], price_pizzas[i], size_pizzas[i], toppings_pizzas[i]])
+        list_pizzas.append([name_pizzas[i], price_pizzas[i], size_pizzas[i], toppings_pizzas[i], id_pizzas[i]])
     return list_pizzas
+
+# function to list the users in the database and return a list with the users
+def list_user():
+    Session = sessionmaker(bind=engine)
+    s = Session()
+    result_users = s.query(Users).all()
+    name_users = []
+    mail_users = []
+    role_users = []
+ 
+    for row in result_users:
+        name_users.append(row.name)
+        mail_users.append(row.mail)
+        role_users.append(row.role)
+        
+    list_users = []
+    for i in range(len(name_users)):
+        list_users.append([name_users[i], mail_users[i], role_users[i]])
+    return list_users
 
 #################
 ### Routes ######
@@ -58,6 +81,11 @@ def home(msg=''):
         return render_template('login.html', msg=msg)
     else:
         return render_template('logout.html', msg=msg)
+    
+# route to the sign up page
+@app.route('/sign_up')
+def sign_up():
+    return render_template('register.html')
 
 # route to the login page and check if the user is in the database
 @app.route('/login', methods=['POST'])
@@ -65,15 +93,47 @@ def do_admin_login():
     msg = ''
     POST_EMAIL = str(request.form['email'])
     POST_PASSWORD = str(request.form['password'])
+    POST_ROLE = str(request.form['role'])
     Session = sessionmaker(bind=engine)
     s = Session()
-    query = s.query(Users).filter(Users.mail.in_([POST_EMAIL]), Users.password.in_([POST_PASSWORD]) )
+    
+    query = s.query(Users).filter(Users.mail.in_([POST_EMAIL]), Users.password.in_([POST_PASSWORD]), Users.role.in_([POST_ROLE]))
     result = query.first()
     
     if result:
         session['logged_in'] = True
+        if POST_ROLE == 'admin':
+            msg = 'You are logged in as Admin'
+            return render_template('admin.html', msg=msg, pizzas=list_pizza(), users=list_user())
+        else:
+            msg = 'You are logged in as costumer'
+            return home(msg)
     else:
         msg = 'Login Error'
+    return home(msg)
+
+# route to the register page
+@app.route('/register', methods=['POST'])
+def do_registration():
+    msg = ''
+    POST_NAME = str(request.form['name'])
+    POST_EMAIL = str(request.form['email'])
+    POST_PASSWORD = str(request.form['password'])
+
+    # check if the user already exists
+    Session = sessionmaker(bind=engine)
+    s = Session()
+    # check if the email already exists using the exists() and the scalar() functions
+    exists_criteria = exists().where(Users.mail==POST_EMAIL)    
+    result = s.query(exists_criteria).scalar()      # returns True or False
+    
+    if result:
+        msg = 'Account already exists'
+        return render_template('register.html', msg=msg)
+    else:
+        datain.DataFromKb(Users, POST_NAME, POST_EMAIL, POST_PASSWORD, 'user')
+        msg = 'You are registered'
+    
     return home(msg)
 
 # route to the logout page
@@ -100,82 +160,40 @@ def order():
     quantity = str(request.form['quantity'])
     return render_template('confirm_order.html', pizza=pizza, quantity=quantity)
 
+# route to add pizzas
+@app.route('/add_pizza', methods=['POST'])
+def add_pizza():
+    POST_PIZZA_NAME = str(request.form['name'])
+    POST_PIZZA_PRICE = int(request.form['price'])
+    POST_PIZZA_SIZE = str(request.form['size'])
+    POST_PIZZA_TOPPINGS = str(request.form['toppings'])
+    datain.InsertPizza(Pizzas, POST_PIZZA_NAME, POST_PIZZA_PRICE, POST_PIZZA_SIZE, POST_PIZZA_TOPPINGS)
+
+    return render_template('admin.html', pizzas=list_pizza(), users=list_user())
+
+# route to deleting pizzas
+@app.route('/delete_pizza', methods=['POST'])
+def delete_pizza():
+    POST_PIZZA_ID = int(request.form['id'])
+    datain.DeletePizza(Pizzas, POST_PIZZA_ID)
+
+    return render_template('admin.html', pizzas=list_pizza(), users=list_user())
+
+# route to mofiy pizzas
+@app.route('/modify_pizza', methods=['POST'])
+def modify_pizza():
+    POST_PIZZA_ID = int(request.form['id'])
+    POST_PIZZA_NAME = str(request.form['name'])
+    POST_PIZZA_PRICE = int(request.form['price'])
+    POST_PIZZA_SIZE = str(request.form['size'])
+    POST_PIZZA_TOPPINGS = str(request.form['toppings'])
+    datain.UpdatePizza(Pizzas, POST_PIZZA_ID, POST_PIZZA_NAME, POST_PIZZA_PRICE, POST_PIZZA_SIZE, POST_PIZZA_TOPPINGS)
+
+    return render_template('admin.html', pizzas=list_pizza(), users=list_user())
+
+
+
 # loop to run the application
 if __name__ == '__main__':
     app.secret_key = os.urandom(12)
     app.run(debug=True)
-
-"""
-@app.route('/')
-def index():
-    
-    result_pizzas = session.query(Pizzas).all()
-    name_pizzas = []
-    price_pizzas = []
-    size_pizzas = []
-    toppings_pizzas = []
-    for row in result_pizzas:
-        name_pizzas.append(row.name)
-        price_pizzas.append(row.price)
-        size_pizzas.append(row.size)
-        toppings_pizzas.append(row.toppings)
-    list_pizzas = []
-    for i in range(len(name_pizzas)):
-        list_pizzas.append([name_pizzas[i], price_pizzas[i], size_pizzas[i], toppings_pizzas[i]])
-    
-    return render_template('index.html', pizzas=list_pizzas)
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        result_admin = db.session.query(db.Admin).all()
-        result_users = db.session.query(db.Users).all()
-
-        name_users = []
-        mail_users = []
-        password_users = []
-        for row in result_users:
-            name_users.append(row.name)
-            mail_users.append(row.mail)
-            password_users.append(row.password)
-
-        name_admin = []
-        mail_admin = []
-        password_admin = []
-        for row in result_admin:
-            name_admin.append(row.name)
-            mail_admin.append(row.mail)
-            password_admin.append(row.password)
-
-        if email in mail_admin and password in password_admin:
-            msg = name_admin[mail_admin.index(email)]
-            page = 'admin.html'
-            
-        elif email in mail_users and password in password_users:
-            msg = name_users[mail_users.index(email)]
-            page = 'users.html'
-            
-        else:
-            msg = 'Login Error'
-            page = 'login.html'
-        
-        return render_template(page, msg=msg)
-
-    return render_template('login.html')
-
-@app.route('/add_user', methods=['GET', 'POST'])
-def add_user():
-    if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-        db.DataFromKb(db.Users, name, email, password)
-        return render_template('add_users.html', msg='User added')
-    return render_template('add_users.html', msg='')
-
-if __name__ == '__main__':
-    app.run(debug=True)
-"""

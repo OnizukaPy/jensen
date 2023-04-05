@@ -45,6 +45,25 @@ def InsertPizza(table, name, price, size, toppings):
     session.add_all([md])
     session.commit()
 
+# fuction to delete pizza from the database
+def DeletePizza(table, id):
+    '''
+    table = name of the table into the database
+    id = id of the pizza to delete
+    '''
+    session.query(table).filter(table.id == id).delete()
+    session.commit()
+
+# function to update pizza in the database
+def UpdatePizza(table, id, name=None, price=None, size=None, toppings=None):
+    '''
+    table = name of the table into the database
+    id = id of the pizza to update
+    '''
+    session.query(table).filter(table.id == id).update({table.name: name, table.price: price, table.size: size, table.toppings: toppings})
+    session.commit()
+
+
 #################
 ### Main      ###
 #################

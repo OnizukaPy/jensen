@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/order.css') }}">
+    <title>Order Page</title>
+{% endblock %}
+
+{% block navbar %}
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
+    <a href="/" class="w3-bar-item w3-button">Home Pizzeria Ivan</a>
+    <a href="#pizzas" class="w3-bar-item w3-button">Modify the menu</a>
+    <a href="#users" class="w3-bar-item w3-button">List Costumers</a>
+    <!-- Right-sided navbar links. Hide them on small screens -->
+    <div class="w3-right w3-hide-small">
+      <a href="/logout" class="w3-bar-item w3-button">Logout</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+
+
+  <!-- Menu Section -->
+  <div class="w3-row w3-padding-64" id="pizzas">
+    <h1 style="text-align: center;">Welcome {{msg}}</h1>
+      <div class="w3-col l6 w3-padding-large">
+            <h1 class="w3-center">Our Menu</h1><br>
+
+            <h4>Pizzas</h4>
+            <table style="width:100%">
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Size</th>
+                  <th>Price</th>
+                </tr>
+                {% for pizza in pizzas %}
+                <tr>
+                  <td>{{pizza[4]}}</td>
+                  <td>{{pizza[0]}}</td>
+                  <td>{{pizza[3]}}</td>
+                  <td>{{pizza[2]}}</td>
+                  <td>{{pizza[1]}}€</td>
+                </tr>
+                {% endfor %}
+
+              </table>
+      </div>
+
+        
+        <div class="w3-col l6 w3-padding-large">
+          <!-- insert a new pizza -->
+            <h1 class="w3-center">Insert a new pizza</h1><br>
+            <form action="/add_pizza" method="post" name="form_insert_pizza">
+              <table style="text-align: left;">
+                <tr>
+                  <th><label for="name"><b>Name</b></label></th>
+                  <th><input type="text" placeholder="Enter Name" name="name" required></th>
+                </tr>
+                <tr>
+                  <th><label for="description"><b>Description</b></label></th>
+                  <th><input type="text" placeholder="Enter Description" name="description" required></th>
+                </tr>
+                <tr>
+                  <th><label for="size"><b>Size</b></label></th>
+                  <th><input type="text" placeholder="Enter Size" name="size" required></th>
+                </tr>
+                <tr>
+                  <th><label for="price"><b>Price</b></label></th>
+                  <th><input type="number" placeholder="Enter Price" name="price" required></th>
+                </tr>
+              </table>
+          
+              <button type="bubmit">Insert pizza</button>
+            </form>
+
+          <!-- delete a pizza -->
+          <h1 class="w3-center">Delete a pizza</h1><br>
+            <form action="/delete_pizza" method="post" name="form_delete_pizza">
+              <table style="text-align: left;">
+                <tr>
+                  <th><label for="id"><b>ID</b></label></th>
+                  <th><input type="text" placeholder="Enter ID" name="id" required></th>
+                </tr>
+              </table>
+              <button type="bubmit">Delete pizza</button>
+            </form>
+          
+          <!-- modify a pizza -->
+          <h1 class="w3-center">Modify a pizza</h1><br>
+            <form action="/modify_pizza" method="post" name="form_modify_pizza">
+              <table style="text-align: left;">
+                <tr>
+                  <th><label for="id"><b>ID</b></label></th>
+                  <th><input type="text" placeholder="Enter ID" name="id" required></th>
+                </tr>
+                <tr>
+                  <th><label for="name"><b>Name</b></label></th>
+                  <th><input type="text" placeholder="Enter Name" name="name" required></th>
+                </tr>
+                <tr>
+                  <th><label for="toppings"><b>Toppings</b></th>
+                  <th><input type="text" placeholder="Enter Toppings" name="toppings"required></th>
+                </tr>
+                <tr>
+                  <th><label for="size"><b>Size</b></label></th>
+                  <th><input type="text" placeholder="Enter Size" name="size"required></th>
+                </tr>
+                <tr>
+                  <th><label for="price"><b>Price</b></label></th>
+                  <th><input type="number" placeholder="Enter Price" name="price" required></th>
+                </tr>
+              </table>
+              <button type="bubmit">Modify pizza</button>
+            </form>
+            
+
+        </div>
+  </div>
+    
+  <!-- Menu Section -->
+  <div class="w3-row w3-padding-64" id="users">
+    <div class="w3-col l6 w3-padding-large">
+            <h1 class="w3-center">Costumers</h1><br>
+
+            <h4>Costumers</h4>
+            <table style="width:100%">
+                <tr>
+                  <th>Name</th>
+                  <th>E-mail</th>
+                  <th>Role</th>
+                </tr>
+                {% for user in users %}
+                <tr>
+                  <td>{{user[0]}}</td>
+                  <td>{{user[1]}}</td>
+                  <td>{{user[2]}}</td>
+
+                </tr>
+                {% endfor %}
+
+            </table>
+    </div>
+  </div>
+
+{% endblock %}

@@ -3,9 +3,7 @@
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-    <title>Login Page</title>
-    <h1>Home</h1>
-    <p>Home page</p>
+    <title>Sign Up Page</title>
 {% endblock %}
 
 {% block navbar %}
@@ -15,7 +13,7 @@
     <a href="/" class="w3-bar-item w3-button">Home Pizzeria Ivan</a>
     <!-- Right-sided navbar links. Hide them on small screens -->
     <div class="w3-right w3-hide-small">
-      <a href="/login" class="w3-bar-item w3-button">Login</a>
+      <a href="/home" class="w3-bar-item w3-button">Login</a>
     </div>
   </div>
 </div>
@@ -23,24 +21,31 @@
 
 {% block body %}
 
-<script src="{{ url_for('static', filename='javascript/validate_form.js') }}"></script> 
+<script src="{{ url_for('static', filename='javascript/validate_user.js') }}"></script> 
 
 <!-- Page content -->
 <div class="w3-content" style="max-width:1100px">
   <!-- Login Form -->
   <div class="w3-row w3-padding-64">
-      <form method="post" name="form_login">
+    <h1 style="text-align: center;">If you have not an account please sign up</h1>
+      <form method="post" name="form_register">
 
           <img src="{{ url_for('static', filename='img/user.png') }}" alt="user" class="avatar">
       
           <br>
-          <label for="email"><b>Username</b></label>
-          <input type="text" placeholder="Enter Username" name="email" required>
+          <label for="name"><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="name" required>
+
+          <label for="email"><b>Email</b></label>
+          <input type="text" placeholder="Enter Email adress" name="email" required>
 
           <label for="psw"><b>Password</b></label>
           <input type="password" placeholder="Enter Password" name="password" required>
+
+          <label for="psw-confirm"><b>Repeat Password</b></label>
+          <input type="password" placeholder="Repeat Password" name="password_confirm" required>
               
-          <button type="button" onClick="validateForm()">Login</button>
+          <button type="button" onClick="validateUser()">Sign up</button>
           <br>
           <h1>{{msg}}</h1>
 
