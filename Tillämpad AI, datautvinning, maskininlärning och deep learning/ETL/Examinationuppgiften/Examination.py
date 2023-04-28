@@ -1,5 +1,4 @@
 import api_smhi as smhi
-import pandas as pd
 import os
 
 PATH = os.path.abspath(os.path.dirname(__file__)) + '/'
@@ -8,7 +7,7 @@ SQLLITE = 'sqlite:///'+PATH+DBNAME
 
 w = smhi.SMHI()
 
-data = w.get_data_from_smhi(2, 58)
+data = w.get_data_from_smhi(2, 58, PATH, "data")
 w.to_sql("weather", SQLLITE)
 
 lista = ["temperature", "air pressure", "precipitation"]
