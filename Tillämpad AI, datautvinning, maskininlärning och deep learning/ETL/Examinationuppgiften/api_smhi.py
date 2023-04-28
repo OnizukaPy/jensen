@@ -1,8 +1,8 @@
-
 import json
 import requests as r
 import pandas as pd
 import matplotlib.pyplot as plt
+from sqlalchemy import create_engine
 
 # den här funktionen konverterar grader till numeriska värden
 def degrees_to_numeric(d):
@@ -41,7 +41,7 @@ class SMHI:
             pf = pd.DataFrame(df['parameters'][i], columns=['name', 'values'])
             temp['validTime'] = df['validTime'][i]
             for j in pf['name']:
-                temp[j] = pf[pf['name'] == j]['values'].values[0]
+                temp[j] = pf[pf['name'] == j]['values'].values[0][0]
             dict.append(temp)
 
         # skapar en dataframe från dictionary
@@ -58,11 +58,19 @@ class SMHI:
 
         return self.data
 
-    def to_plot(self, name):
+    def to_plot(self, name, url):
         self.data["date"] = pd.to_datetime(self.data["date"])
-        self.data[name] = degrees_to_numeric(self.data[name])
         gf = pd.DataFrame(self.data, columns=["date", name])
         gf.plot(x="date", y=name, kind="line")
-        plt.show()
+        plt.savefig(f'{url}{name}.png')
+    
+
+    def to_sql(self, table, database_url):
+        df = pd.DataFrame(self.data)
+        df["date"] = pd.to_datetime(df["date"])
+        engine = create_engine(database_url)
+        engine.execute(f"DROP TABLE IF EXISTS {table}")
+        df.to_sql(table, engine, if_exists="append", index=False)
+        print(f"Data saved to {database_url}")
 
         
