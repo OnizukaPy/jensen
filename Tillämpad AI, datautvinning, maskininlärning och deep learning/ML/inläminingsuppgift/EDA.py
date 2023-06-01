@@ -6,6 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.datasets import load_breast_cancer
+from sklearn.preprocessing import StandardScaler
 
 import os
 
@@ -14,25 +15,26 @@ path = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 # ladda in datasetet
 cancer = load_breast_cancer()
+df_cancer = pd.DataFrame(
+                    np.c_[cancer['data'], cancer['target']], 
+                    columns = np.append(cancer['feature_names'], ['target'])
+            )
+scaler = StandardScaler()
+df_cancer_scaled = pd.DataFrame(scaler.fit_transform(df_cancer.drop(['target'], axis = 1)), columns=df_cancer.columns[:-1])
+
+df_cancer = pd.concat([df_cancer_scaled, df_cancer['target']], axis = 1)
 
 förts_välj = input("Vill du se en deskrion av datasetet? (j/n): ")
 if förts_välj.lower() == "j":
 
     # skriva en sammanfattning av datasetet
     sammanfatning = (
-        f"Databasen innehåller information om bröstcancer.\n\n"
-            f"Database filename är {cancer['filename']}\n"
-            f"Vi importerar databasen från den {cancer['data_module']} module\n\n"
-        f"Database summary:\n"
+        f"\n\nDatabasen {cancer['filename']} innehåller information om bröstcancer. Vi importerar databasen från den {cancer['data_module']} module.\n\n"
+        f"Database summary:\n\n"
             f"Number of samples: {cancer['data'].shape[0]}\n"
             f"Number of features: {cancer['data'].shape[1]}\n"
             f"Number of classes: {cancer['target_names'].shape[0]}\n"
-            f"Number of missing values: {np.isnan(cancer['data']).sum()}\n"
-            f"Number of unique values: {np.unique(cancer['data']).shape[0]}\n"
-            f"Number of features with missing values: {np.isnan(cancer['data']).any().sum()}\n"
-            f"Number of features with constant values: {np.unique(cancer['data'], axis=0).shape[0]}\n"
-            f"Number of features with duplicated values: {cancer['data'].shape[1] - np.unique(cancer['data'], axis=1).shape[1]}\n"
-            f"Number of features with zero values: {np.count_nonzero(cancer['data'] == 0)}\n"
+            f"Class names: {cancer['target_names']}\n"
     ) + "\n" + (cancer['DESCR'])
     print(sammanfatning)
     # sparar sammanfattningen i en fil
@@ -43,4 +45,6 @@ if förts_välj.lower() == "j":
 
 else:
     print("Okej, vi går vidare till nästa steg.")
+
+
 
