@@ -36,7 +36,7 @@ class EDA:
         plt.savefig(DB.PATH + "images/database/" + 'pairplot.png')
         #plt.show()
 
-        return "Total correlations is saved in the file pairplot.png"
+        return "Total correlations is saved in the filename pairplot.png"
     
     def plot_feature_distribution(self):
 
@@ -83,7 +83,10 @@ class EDA:
 
         return "Boxplots are saved in the files EDA"
 
-
+db = DB.set_db()
+df = DB.set_df(db)
+eda = EDA(df)
+eda.plot_pairplot()
 
 
 
