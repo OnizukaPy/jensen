@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import numpy as np
 import pandas as pd
@@ -27,11 +28,15 @@ class Database:
         self.DESCR = self.db['DESCR']
     
     def print_info(self):
-        self.summary = (f"Database summary:\n\n"
-            f"Number of samples: {self.data.shape[0]}\n"
-            f"Number of features: {self.data.shape[1]}\n"
-            f"Number of classes: {self.target_names.shape[0]}\n"
-            f"Class names: {self.target_names}\n"
+        print("Skriver en sammanfattning av datasetet...\n")
+        self.summary = (
+            f"Dataset {self.filename} innebär bröstcancerdata.\n"
+            f"Dataset är en {self.data_module}s module.\n"
+            f"Dataset sammanfattning:\n\n"
+            f"Antal rader: {self.data.shape[0]}\n"
+            f"Antal kulumner: {self.data.shape[1]}\n"
+            f"Antal klasser: {self.target_names.shape[0]}\n"
+            f"Klassnamn: {self.target_names}\n"
         )
         return self.summary
     
@@ -39,8 +44,8 @@ class Database:
         return self.DESCR
     
     def save_info(self):
-
-        with open(PATH+"database.txt", "w") as f:
+        print("Sparar sammanfattningen i en fil...\n")
+        with open(PATH + "documents/"+"database.txt", "w") as f:
             f.write(self.summary + "\n" + self.DESCR)
             print("Sammanfattningen är sparad i filen database.txt")
             f.close()
@@ -58,46 +63,57 @@ class Database:
 
         return self.df
 
+def create_directory():
+    print("skapar mappen för att spara bilder...\n")
+    try:
+        # ta bort mappen om den finns
+        if os.path.exists(PATH + "images"):
+            print("Mappen images finns redan.\n")
+            shutil.rmtree(PATH + "images")
+            print("Mappen images är borttagen.\n")
+            time.sleep(sleep_time)
+            print("Skapar mappen images igen...\n")
+            os.mkdir(PATH + "images")
+            os.mkdir(PATH + "images/EDA")
+            os.mkdir(PATH + "images/database")
+            print("Mappen images är skapat.\n")
+        else:
+            os.mkdir(PATH + "images")
+            os.mkdir(PATH + "images/EDA")
+            os.mkdir(PATH + "images/database")
+            print("Mappen images är skapat.\n")
 
+        if os.path.exists(PATH + "documents"):
+            print("Mappen documents finns redan.\n")
+            shutil.rmtree(PATH + "documents")
+            print("Mappen documents är borttagen.\n")
+            time.sleep(sleep_time)
+            print("Skapar mappen documents igen...\n")
+            os.mkdir(PATH + "documents")
+            print("Mappen documents är skapat.\n")
+        else:
+            os.mkdir(PATH + "documents")
+            print("Mappen documents är skapat.\n")
+        
+        time.sleep(sleep_time)
+        return "Mapparna är skapade.\n"
 
-# ladda in datasetet
-print("\nLaddar in datasetet...\n")
-db = Database()
-time.sleep(sleep_time)
-print("Datasetet är laddat.\n")
-time.sleep(sleep_time)
-print("Skriver en sammanfattning av datasetet...\n")
-print(db.print_info())
-time.sleep(sleep_time)
+    except OSError:
+        print("Error: Creating directory.\n")
+        
 
-print("Skriver en deskrition.\n")
-print(db.print_descr())
-time.sleep(sleep_time)
+def set_db():
+    db = Database()
+    print(db.print_info())
+    db.save_info()
 
-print("Sparar sammanfattningen i en fil...\n")
-db.save_info()
-time.sleep(sleep_time)
+    return db
 
-print("Skapar en dataframe...\n")
-df = db.create_dataframe()
+def set_df(db):
 
-print(df.head(), "\n")
-print(df.info(), "\n")
-print(df.describe(), "\n")
-time.sleep(sleep_time)
-
-print("Skalar dataframe...\n")
-df = db.scale_dataframe()
-
-print(df.head(), "\n")
-print(df.info(), "\n")
-print(df.describe(), "\n")
-
-
-
-
-
-time.sleep(sleep_time)
-print("Datasetet är laddat.\n")
+    df = db.create_dataframe()
+    df = db.scale_dataframe()
+    
+    return df
 
 

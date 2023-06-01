@@ -1,9 +1,11 @@
-Database summary:
+Dataset breast_cancer.csv innebär bröstcancerdata.
+Dataset är en sklearn.datasets.datas module.
+Dataset sammanfattning:
 
-Number of samples: 569
-Number of features: 30
-Number of classes: 2
-Class names: ['malignant' 'benign']
+Antal rader: 569
+Antal kulumner: 30
+Antal klasser: 2
+Klassnamn: ['malignant' 'benign']
 
 .. _breast_cancer_dataset:
 
