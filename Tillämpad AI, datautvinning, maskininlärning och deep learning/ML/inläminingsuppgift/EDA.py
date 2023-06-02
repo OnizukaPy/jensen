@@ -23,13 +23,6 @@ class EDA:
         #plt.show()
 
         return "Correlation matrix is saved in the file correlation_matrix.png"
-    
-    def plot_count_target(self):
-        sns.countplot(x = "target", data = self.df)
-        plt.savefig(DB.PATH + "images/database/" + 'count_target.png')
-        #plt.show()
-
-        return "Count target is saved in the file count_target.png"
 
     def plot_pairplot(self):
         sns.pairplot(self.df, hue="target", height=2)
@@ -83,10 +76,6 @@ class EDA:
 
         return "Boxplots are saved in the files EDA"
 
-db = DB.set_db()
-df = DB.set_df(db)
-eda = EDA(df)
-eda.plot_pairplot()
 
 
 
