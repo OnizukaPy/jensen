@@ -24,8 +24,8 @@ class EDA:
 
         return "Correlation matrix is saved in the file correlation_matrix.png"
 
-    def plot_pairplot(self):
-        sns.pairplot(self.df, hue="target", height=2)
+    def plot_pairplot(self, array):
+        sns.pairplot(self.df[array], hue="target", height=2)
         plt.savefig(DB.PATH + "images/database/" + 'pairplot.png')
         #plt.show()
 
@@ -76,10 +76,18 @@ class EDA:
 
         return "Boxplots are saved in the files EDA"
 
-
-
-
-
+"""db = DB.Database()
+df = DB.set_df(db)
+print(df.head())
+eda = EDA(df)
+eda.plot_correlation_matrix()
+eda.plot_feature_distribution()
+temp = eda.define_best_features(0.9)
+eda.plot_boxplot()
+temp = np.append(temp, ['target'], axis=0)
+print(temp)
+print(df[temp].head())
+eda.plot_pairplot(temp)"""
 
 
 

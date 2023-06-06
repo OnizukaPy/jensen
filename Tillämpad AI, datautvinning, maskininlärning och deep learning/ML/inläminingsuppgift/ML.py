@@ -38,26 +38,26 @@ class ML:
         self.y = np.where(self.df['target'] == 'malignant', 1, 2)
         self.random_state = rs
 
-    def pca_analysis(self):
+    def pca_analysis(self, show=False):
         self.pca = PCA(n_components=2)
         self.X_pca = self.pca.fit_transform(self.X)
         self.df_pca = pd.DataFrame(data = self.X_pca, columns = ['pca1', 'pca2'])
         self.df_pca['target'] = self.y
         self.y_pca = self.y
 
-        plt.figure(figsize=(10,8))
-        sns.scatterplot(x="pca1", y="pca2", data=self.df_pca, hue="target", palette="Set1")
-        plt.xlabel("PC1")
-        plt.ylabel("PC2")
-        plt.title("PCA om Bröst Cancer dataset")
-        plt.legend()
-        plt.show()   
+        if show == True:
+            plt.figure(figsize=(10,8))
+            sns.scatterplot(x="pca1", y="pca2", data=self.df_pca, hue="target", palette="Set1")
+            plt.xlabel("PC1")
+            plt.ylabel("PC2")
+            plt.title("PCA om Bröst Cancer dataset")
+            plt.legend()
+            plt.show()   
+            print("PCA analysis is done")        
 
-        print("PCA analysis is done")        
-
-    def split_data(self, pca):
+    def split_data(self, pca, show):
         if pca == True:
-            self.pca_analysis()
+            self.pca_analysis(show)
             self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X_pca, self.y_pca, test_size=0.3, random_state=self.random_state)
             print("Data is splitted into train and test with PCA")
 
@@ -70,7 +70,7 @@ class ML:
     
     def linear_regression(self, pca):
 
-        self.split_data(pca)
+        self.split_data(pca, show=False)
         self.lin_reg = LinearRegression()
         self.lin_reg.fit(self.X_train, self.y_train)
         self.y_pred = self.lin_reg.predict(self.X_test)
@@ -84,9 +84,11 @@ class ML:
         print(f"PCA: {pca}")
         print(f"Mean squared error: {self.mse}\nMean absolute error: {self.mae}\nR2 score pred: {self.r2}\nScore test: {self.score}")
 
+        return self.score
+    
     def logistic_regression(self, pca):
 
-        self.split_data(pca)        
+        self.split_data(pca, show=False)        
         self.log_reg = LogisticRegression()
         self.log_reg.fit(self.X_train, self.y_train)
         self.y_pred = self.log_reg.predict(self.X_test)
@@ -103,9 +105,11 @@ class ML:
         print('\n')
         print(f"TP: {self.confusion_matrix[0][0]}\nFP: {self.confusion_matrix[0][1]}\nFN: {self.confusion_matrix[1][0]}\nTN: {self.confusion_matrix[1][1]}")
     
+        return self.accuracy_score
+
     def forest_random_class(self, pca):
 
-        self.split_data(pca)
+        self.split_data(pca, show=False)
         self.forest_random = RandomForestClassifier(n_estimators=100, random_state=self.random_state)
         self.forest_random.fit(self.X_train, self.y_train)
         self.y_pred = self.forest_random.predict(self.X_test)
@@ -121,6 +125,7 @@ class ML:
         self.y_pred_fs = self.forest_random_fs.predict(self.X_test_fs)
 
         self.accuracy_score = accuracy_score(self.y_test, self.y_pred_fs)
+        self.cross_val_score = cross_val_score(self.forest_random_fs, self.X, self.y, cv=5)
         self.confusion_matrix = confusion_matrix(self.y_test, self.y_pred_fs)
         self.classification_report = classification_report(self.y_test, self.y_pred_fs)
 
@@ -131,8 +136,10 @@ class ML:
         print('\n')
         print(f"TP: {self.confusion_matrix[0][0]}\nFP: {self.confusion_matrix[0][1]}\nFN: {self.confusion_matrix[1][0]}\nTN: {self.confusion_matrix[1][1]}")
 
+        return self.accuracy_score
+
     def KNC(self, pca):
-        self.split_data(pca)
+        self.split_data(pca, show=False)
         self.knc = KNeighborsClassifier(n_neighbors=5, metric='euclidean')
         self.knc.fit(self.X_train, self.y_train)
         self.y_pred = self.knc.predict(self.X_test)
@@ -148,4 +155,24 @@ class ML:
         print('\n')
         print(f"TP: {self.confusion_matrix[0][0]}\nFP: {self.confusion_matrix[0][1]}\nFN: {self.confusion_matrix[1][0]}\nTN: {self.confusion_matrix[1][1]}")
 
+        return self.accuracy_score
 
+    def complete_analysis(self):
+        print('PCA analysis\n')
+        self.pca_analysis(True)
+        print('\nLinear regression\n')
+        lr_pca = self.linear_regression(True)
+        lr = self.linear_regression(False)
+        print('\nLogistic regression\n')
+        log_reg_pca = self.logistic_regression(True)
+        log_reg = self.logistic_regression(False)
+        print('\nForest random\n')
+        forest_random = self.forest_random_class(False)
+        print('\nKNeighborsClassifier\n')
+        knc_pca = self.KNC(True)
+        knc = self.KNC(False)
+        
+        df_temp = pd.DataFrame({'Linear regression': [lr_pca, lr], 'Logistic regression': [log_reg_pca, log_reg], 'Forest random': [np.NaN, forest_random], 'KNC': [knc_pca, knc]})
+        df_temp.index = ['PCA', 'No PCA']
+
+        return df_temp
