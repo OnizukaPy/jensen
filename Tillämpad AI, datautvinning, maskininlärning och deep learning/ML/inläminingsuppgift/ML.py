@@ -1,23 +1,24 @@
-# linear regression: GridSearchCV, RandomizedSearchCV (Ridge, Lasso)
-# logistic regression: med PCA, utan PCA
-# ForestRandomClassifier
-# accuracy_score, confusion matrix, classification report, cross_val_score
-
-import database as DB
-from sklearn.model_selection import train_test_split, cross_val_score
+# Importera bibliotek och moduler som behövs för att skapa en maskininlärningsmodell
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectFromModel
 from sklearn.decomposition import PCA
 from sklearn.neighbors import KNeighborsClassifier
+
+# Importera bibliotek och moduler som behövs för att träna och testa modellen
+from sklearn.model_selection import train_test_split, cross_val_score
+
+# Importera bibliotek och moduler som behövs för att utvärdera modellen
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
+# Importera bibliotek och moduler som behövs för att visualisera modellen och hantera data
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# funktion för att selektera de bästa variablerna med hjälp av SelectFromModel och RandomForestClassifier
 def select_features(X_train, y_train, X_test):
     # Find a good subset of features
 
@@ -30,6 +31,11 @@ def select_features(X_train, y_train, X_test):
 
     return X_train_fs, X_test_fs, fs
 
+# Skapa en klass för att utföra maskininlärning och utvärdera modellen
+# i klassen finns metoder för att träna och testa modellen, utvärdera modellen och visualisera modellen och jamföra den med andra modeller
+# modeller används är: LinearRegression, LogisticRegression, RandomForestClassifier, KNeighborsClassifier
+# vi använder också PCA för att visualisera en clastering av datan som vi har använt för att träna och testa modellen
+
 class ML:
     def __init__(self, df, best_features, rs):
         self.df = df
@@ -38,6 +44,7 @@ class ML:
         self.y = np.where(self.df['target'] == 'malignant', 1, 2)
         self.random_state = rs
 
+    # funktion för att visualisera PCA
     def pca_analysis(self, show=False):
         self.pca = PCA(n_components=2)
         self.X_pca = self.pca.fit_transform(self.X)
@@ -55,6 +62,7 @@ class ML:
             plt.show()   
             print("PCA analysis is done")        
 
+    # funktion för att dela upp datan i train och test med eller utan PCA
     def split_data(self, pca, show):
         if pca == True:
             self.pca_analysis(show)
@@ -67,7 +75,7 @@ class ML:
         else:
             print("pca must be True or False")
         
-    
+    # funktion för att träna och testa modellen med LinearRegression
     def linear_regression(self, pca):
 
         self.split_data(pca, show=False)
@@ -86,6 +94,7 @@ class ML:
 
         return self.score
     
+    # funktion för att träna och testa modellen med LogisticRegression
     def logistic_regression(self, pca):
 
         self.split_data(pca, show=False)        
@@ -107,6 +116,7 @@ class ML:
     
         return self.accuracy_score
 
+    # funktion för att träna och testa modellen med RandomForestClassifier
     def forest_random_class(self, pca):
 
         self.split_data(pca, show=False)
@@ -138,6 +148,7 @@ class ML:
 
         return self.accuracy_score
 
+    # funktion för att träna och testa modellen med KNeighborsClassifier
     def KNC(self, pca):
         self.split_data(pca, show=False)
         self.knc = KNeighborsClassifier(n_neighbors=5, metric='euclidean')
@@ -157,6 +168,7 @@ class ML:
 
         return self.accuracy_score
 
+    # funktion för att köra alla analyser och skriva ut resultatet som en dataframe av score för varje modell
     def complete_analysis(self):
         print('PCA analysis\n')
         self.pca_analysis(True)

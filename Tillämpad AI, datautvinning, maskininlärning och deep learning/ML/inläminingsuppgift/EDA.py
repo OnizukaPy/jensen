@@ -1,19 +1,18 @@
+# importera bibliotek som behövs för att hantera data och visualisera den
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
 
+# importera moduler och bibliotek som behövs för att använda mappen 
 import database as DB
 
-import time
-sleep_time = 0.5
-
+# skapa en klass för att utföra EDA
 class EDA:
 
     def __init__(self, df):
         self.df = df                
     
+    # skapa en metod för att skriva ut en matris med korrelationer
     def plot_correlation_matrix(self):
 
         plt.figure(figsize=(20, 20))
@@ -24,6 +23,7 @@ class EDA:
 
         return "Correlation matrix is saved in the file correlation_matrix.png"
 
+    # skapa en metod för att skriva ut grafen pairplot med den besta variablerna 
     def plot_pairplot(self, array):
         sns.pairplot(self.df[array], hue="target", height=2)
         plt.savefig(DB.PATH + "images/database/" + 'pairplot.png')
@@ -31,6 +31,7 @@ class EDA:
 
         return "Total correlations is saved in the filename pairplot.png"
     
+    # skapa en metod för att skriva ut en bil med alla histogram för alla variabler
     def plot_feature_distribution(self):
 
         self.df.hist(figsize=(20, 20))
@@ -39,6 +40,8 @@ class EDA:
 
         return "Feature distribution is saved in the file feature_distribution.png"
     
+    # skapa en metod för att spara en lista med de bästa variablerna, dvs de som har högst korrelationer.
+    # n är en parameter som används för att välja de bästa variablerna.
     def define_best_features(self, n):
 
         if n >= 1 or n <= 0:
@@ -55,17 +58,16 @@ class EDA:
             
             sorted_corr = sorted(result, key=lambda x: x[2], reverse=True)
             
-            # skapa en lista av kolumner son vill använda för att träna modellen
             temp = np.array([])
             for i in range(len(sorted_corr)):
                 temp = np.append(temp, sorted_corr[i][1])
                 temp = np.append(temp, sorted_corr[i][0])
 
-            # ta bort dubletter
             self.best_features = np.unique(temp)
 
             return self.best_features
-        
+    
+    # skapa en metod för att skriva ut boxplots bilder för alla besta variabler
     def plot_boxplot(self):
 
         for i in range(len(self.best_features)):
@@ -75,19 +77,6 @@ class EDA:
             #plt.show()
 
         return "Boxplots are saved in the files EDA"
-
-"""db = DB.Database()
-df = DB.set_df(db)
-print(df.head())
-eda = EDA(df)
-eda.plot_correlation_matrix()
-eda.plot_feature_distribution()
-temp = eda.define_best_features(0.9)
-eda.plot_boxplot()
-temp = np.append(temp, ['target'], axis=0)
-print(temp)
-print(df[temp].head())
-eda.plot_pairplot(temp)"""
 
 
 

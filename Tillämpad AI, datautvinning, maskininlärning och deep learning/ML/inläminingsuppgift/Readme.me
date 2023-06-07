@@ -1,0 +1,41 @@
+Gruppen är sammansatt av: Bruno De Silva och Ivan Catalano
+
+Vi använder datasetet från sklearn: bröst cancer datasetet (breast_cancer). Det är ett dataset med 569 observationer och 30 variabler.
+
+Koden är skriven i Python 3 och notebook jupiter och använder följande paket: 
+
+    pandas
+    numpy
+    matplotlib
+    seaborn
+    sklearn
+    time
+    os
+    shutil
+
+Koden är delat i 4 delar:
+
+1 - database.py: 
+
+        innehåller en klass med metoder för att skapa databasen från sklearn-datasetet ch initiera den med informationer sparade i en txt-fil.
+        Koden innehåller också för att skapa en mapp för att spara bilder i och två funktioner för att skapa DataFrame från databasen.
+
+2 - EDA.py: 
+
+        innehåller en klass med metoder för att utföra EDA på databasen. 
+        Koden innehåller metoder för att skapa en matris med korrelationer mellan variabler, välja ut de variabler som har högst korrelation med target-variabeln,
+        skapa en matris med scatterplots för att visualisera korrelationerna, skapa en matris med boxplots för att visualisera variablernas fördelning,
+        och hitta outliers i variablerna. De besta variablerna sparas i en array.
+
+3 - ML.py:
+
+        innehåller en klass med metoder för att utföra maskininlärning på databasen. 
+        Koden innehåller metoder för att skapa olika modeller, träna och utvärdera dem.
+        Till sist jamförar koden modellerna och visar den bästa modellen.
+
+4 - Project ML.ipynb:
+
+        innehåller en notebook med kod för att köra alla klasser och metoder i rätt ordning, och för att visa resultatet av ML analysisen. 
+
+Koden kan förbärättras genom att lägga till fler modeller och fler metoder för att utvärdera modellerna. Till exempel Lasso och Ridge regression, och metoder 
+för att hitta de bästa hyperparametrarna för den linear regression modellen, används GridSearchCV och RandomizedSearchCV.
