@@ -1,0 +1,11 @@
+CO2's misuraations
+https://gml.noaa.gov/aftp/data/trace_gases/co2/pfp/surface/co2_surface-pfp_1_ccgg_ASCIItext.zip
+
+grown population
+https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/EXCEL_FILES/1_General/WPP2022_GEN_F01_DEMOGRAPHIC_INDICATORS_COMPACT_REV1.xlsx
+
+deforestarion
+https://ourworldindata.org/deforestation
+blob:https://ourworldindata.org/dd888c14-a03c-4337-8bce-80b500645beb
+blob:https://ourworldindata.org/93fbc00d-961c-48e5-aead-5e66b944adb8
+blob:https://ourworldindata.org/7606fe55-a2bf-4756-a1b4-2d0743bdbf74
