@@ -1,0 +1,10 @@
+VEI,General Description,Cloud Column Height (km),Volume (m3),Classification
+0,non-explosive,<0.1,10e4,Gentle
+1,Small,0.1-1,10e6,Effusive
+2,Moderate,1-5,10e7,Explosive
+3,Moderate-Large,3-15,10e8,Explosive
+4,Large,10-25,10e9,Explosive
+5,Very Large,>25,10e10,Cataclysmic
+6,	,>25 km,10e11,paroxysmal
+7,	,>25 km,10e12,colossal
+8,	,>25 km,10e13,super-colossal
